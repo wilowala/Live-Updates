@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 mb-5 text-center">
+
+                    <hr>
+                    <h2><strong>Profile</strong></h2>
+                    {% if user.profile %}
+                    {% if user.profile.profile_pic %}
+                    <img src="{{user.profile.profile_pic.url}}" class='rounded-circle' alt="profile image"
+                        style="width:100px; height:100px">
+                    {% else %}
+                    <i class="fa-solid fa-circle-user h1"></i>
+                    {% endif %}
+
+                    <p><span><strong>Username</strong></span>: {{user.username}}</p>
+                    <!-- <p>Newww</p> -->
+                    <!-- <p><span><strong>Username</strong></span>: {{request.user.username}}</p> -->
+                    <p><span><strong>Bio:</strong></span> {{user.profile.bio}} </p>
+                    <p><span><strong>email</strong></span>: {{user.email}} </p>
+
+                    {%else %}
+
+                    <hr>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="contacts">
+                        <h2><strong>Contacts</strong></h2>
+                        {% if user.contacts %}
+                        {% for contact in user.contacts.all|slice:"0:1" %}
+                        <p><i class="fa-solid h4 fa-phone"></i> {{contact.phone_no}}</p>
+                        <p> <a href="{{contact.github}}"> <i class="fa-brands h2 fa-github text-dark"></i></a>
+                            <a href="{{contact.linkedin}}"> <i class="fa-brands h2 fa-linkedin"></i></a>
+                            <a href="{{contact.twitter}}"> <i class="fa-brands h2 fa-twitter"></i></a>
+                            <a href="{{contact.email}}"> <i class="fa-solid h2 fa-envelope text-danger"></i></a> </p>
+                        <div class="upload m-3">
+                            <a href="{% url 'contacts' user.id %}" class="btn btn-primary btn-sm"> Update Contact
+                                Info</a>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <p>No contact information</p>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-6 mt-4">
+                    <h1 class="text-center">{{user}}'s posts</h1>
+                    {{user}}
+                    {{posts}}
+                    <div>
+                        <p> User has {{user.posts.all | length}} posts</p>
+                        <hr>
+                        {% if user.posts %}
+                        {% for post in user.posts.all %}
+                        <div class="mb-5 card p-2">
+                            <strong>{{post.post}}</strong>
+
+                            <!-- <p>{{post.user.username}}</p> -->
+                            <p>
+                                <img src="{{post.image.url}}" class="img-fluid" alt=""
+                                    style="height:240px; border-radius:10px;">
+                            </p>
+                            <p>
+                                <p class="text-muted float-right">
+                                    <small class="card-text fw-3 "><i class="fa-solid fa-clock"></i>
+                                        <strong>{{post.created_on|time}}
+                                            {{post.created_on|timesince}} ago
+                                        </strong>
+                                    </small>
+
+                                </p>
+                            </p>
+                            <!-- <p>
+                                <a class="float-left btn btn-dark btn-sm"
+                                    href="">post Details</a>
+                                <a class="float-right btn btn-dark btn-sm" href="{{post.url}}">View post</a>
+                            </p> -->
+                        </div>
+                        <hr>
+                        {% endfor %}
+
+                        {% else %}
+                        <p>No posts</p>
+                        {% endif %}
+
+
+                        <hr class="mt-2">
+                    </div>
+                </div>
+            </div>
+    </section>
+
+</main>
+
+
+{% endblock %}
