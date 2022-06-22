@@ -1,0 +1,90 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<body>
+  {% include 'main/navbar.html' %}
+  <main class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-sm-3 col-lg-2 border-right border-bottom">
+        {% include 'main/sidebar.html' %}
+      </div>
+      <div class="col-md-6 col-sm-6 col-lg-7 border-right">
+        <div class="post-wrapper">
+          <button class="btn btn-dark btn-sm mt-3 mb-3" id="post-btn">
+            New Post
+          </button>
+          <div class="new-post m-3" style="display:none;">
+            <form action="" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{form |crispy}}
+              <input type="submit" class="btn btn-dark btn-sm m-3" id="newpost" value="Post">
+            </form>
+
+          </div>
+
+        </div>
+        <div class="">
+          {% for post in posts %}
+          <div class="card mb-3 border" style="background-color: #cce0de1f;">
+            <div class="float-left mt-1 ml-1 mb-0">
+              <img src="{{post.user.profile.profile_pic.url}}" alt="image" class="rounded-circle"
+                style="width:40px; height:40px">
+              <p class=""> <a href="{% url 'user_profile' post.user.username %}" class="text-dark text-decoration-none"><strong>
+                    @{{post.user.username}}</strong></a> </p>
+            </div>
+            <div class="card-body">
+              <p class="card-text">
+                {{post.post}}
+              </p>
+
+              {% if post.image %}
+              <div>
+                <img src="{{post.image.url}}" alt="image" class="img-fluid" style="height:240px; border-radius:10px;">
+              </div>
+              {%else %}
+              {% endif %}
+            </div>
+              <div class="ml-3 mr-3">
+              <p class="text-muted float-left mt-2">
+                <!-- <small class="card-text fw-3 ">
+                  <i class="fas fa-comment-dots h5"></i>
+                  <i class="fa-solid fa-heart h5 text-danger"></i>
+                  <i class="fas fa-share-alt h5"></i>
+                </small> -->
+
+              </p>
+
+              <p class="text-muted float-right">
+                <small class="card-text fw-3 "><i class="fa-solid fa-clock"></i>
+                  <strong>{{post.created_on|time}}{{post.created_on|date}}
+                    <!-- {{post.created_on|timesince}} ago -->
+                  </strong>
+                </small>
+
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+      <div class="col-md-3 col-sm-3 col-lg-3 border-left">
+        <!-- <h2><small>Neighborhood Details</small></h2>
+        <p> <strong> Name: </strong>{{request.user.profile.neighborhood.name}}</p>
+        <p> <strong>Occupants:</strong> {{request.user.profile.neighborhood.occupants_count}}</p>
+        <p> <strong>Location:</strong> {{request.user.profile.neighborhood.location}}</p> -->
+
+        <h2><small>Neighborhood Details</small></h2>
+        <p> <strong> Name: </strong>{{neighborhood.name}}</p>
+        <p> <strong>Occupants:</strong> {{neighborhood.occupants_count}}</p>
+        <p> <strong>Location:</strong> {{neighborhood.location}}</p>
+
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
+{% endblock content %}
